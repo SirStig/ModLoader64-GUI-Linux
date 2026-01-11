@@ -101,10 +101,10 @@ elif command -v pacman >/dev/null; then
     # -Sy fixes issues where local DB is out of sync causing 404s
     # --needed prevents reinstalling existing packages
     if [ "$IS_STEAMOS" = true ]; then
-        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxscrnsaver unzip
     else
         # Standard Arch
-        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxscrnsaver unzip
     fi
 fi
 
