@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ModLoader64 GUI
+Comment=Play N64 mods the modern way!
+Exec=bash -c "cd $(pwd) && ./start_linux.sh"
+Icon=$(pwd)/resources/ml64.png
+Terminal=false
+Type=Application
+Categories=Game;Network;
+StartupNotify=true
