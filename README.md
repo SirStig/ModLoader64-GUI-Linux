@@ -8,6 +8,7 @@ ModLoader64 is an emulator and mod loading platform primarily for *Ocarina of Ti
 **This repository provides a `setup_modloader.sh` script that automatically:**
 1.  Downloads the latest ModLoader64 release.
 2.  **Fixes Crashes**: Automatically handles the complex `libGLEW` and `libSFML` version mismatches that prevent the game from starting on Steam Deck.
+3.  **Steam Deck Ready**: Automatically handles read-only filesystem validation, "database lock" errors, and initialization of pacman keys.
 3.  **Installs Dependencies**: Detects your OS (SteamOS, Fedora, Ubuntu) and installs the required libraries.
 4.  **Texture Packs**: Optionally downloads and installs high-resolution texture packs (e.g., OOT 3DS Retexture).
 5.  **Desktop Integration**: Creates a working `.desktop` shortcut and launch script fixes for window resizing.
@@ -24,7 +25,31 @@ ModLoader64 is an emulator and mod loading platform primarily for *Ocarina of Ti
 4.  Follow the prompts (enter sudo password for dependencies, chose 'y' for textures).
 5.  Launch the game using the new shortcut: **ModLoader64 (OOT).desktop**.
 
-## 🛠️ Technical Fixes Explained
+## �️ Getting Started (Post-Install)
+
+Once the installation is complete, follow these steps to set up your game:
+
+### 1. 🏰 Setup Your ROM
+The ModLoader requires a valid **Legend of Zelda: Ocarina of Time** ROM (v1.0 USA is recommended).
+1.  Navigate to the installation folder (default is `ModLoader64_Install`).
+2.  Open the `roms` folder.
+3.  **Copy your `.z64` ROM file into this folder.**
+4.  Launch the application using the created shortcut.
+5.  Go to the **"ROMs"** tab on the left sidebar.
+6.  **Check the box** next to your ROM to enable it.
+
+### 2. 🧩 Installing Mods
+To play Ocarina of Time Online or other mods:
+1.  Download your desired mods (usually `.pak` files or folders).
+2.  Open the `mods` folder in your install directory.
+3.  **Place your mod files here.**
+4.  In the application, go to the **"Mods"** tab.
+5.  **Check the box** next to the mods you want to load.
+
+### 3. ▶️ Play!
+-   Once your ROM and Mods are enabled (checked), click the large **Play** button to start the game!
+
+## �🛠️ Technical Fixes Explained
 For developers or curious users, here is what this installer addresses:
 
 *   **GLEW Mismatch**: The app requires `libGLEW.so.2.1`. Modern Linux distros ship with 2.2+. The script identifies 64-bit system libraries and creates a local compatibility symlink, forcing the app to accept the newer version via `LD_PRELOAD`.

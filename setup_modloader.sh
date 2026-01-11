@@ -75,8 +75,37 @@ elif command -v apt >/dev/null; then
     sudo apt update
     sudo apt install -y glew-utils libglew-dev libappindicator3-1 libxss1 libspeexdsp1 libsfml-dev
 elif command -v pacman >/dev/null; then
-    sudo pacman -S --noconfirm glew libappindicator-gtk3 speexdsp sfml
-fi
+    # SteamOS / Arch Linux Detection
+    IS_STEAMOS=false
+    if grep -q "SteamOS" /etc/os-release; then
+        IS_STEAMOS=true
+        echo "Detected SteamOS."
+        
+        # 1. Disable Read-Only
+        echo "Disabling SteamOS Read-Only File System..."
+        sudo steamos-readonly disable
+        
+        # 2. Fix Database Lock
+        if [ -f "/var/lib/pacman/db.lck" ]; then
+            echo "Removing stale pacman database lock..."
+            sudo rm /var/lib/pacman/db.lck
+        fi
+        
+        # 3. Initialize Keys (Common issue on Deck)
+        echo "Initializing Pacman Keys (this may take a moment)..."
+        sudo pacman-key --init
+        sudo pacman-key --populate archlinux holo
+    fi
+
+    echo "Updating Package Database & Installing Dependencies..."
+    # -Sy fixes issues where local DB is out of sync causing 404s
+    # --needed prevents reinstalling existing packages
+    if [ "$IS_STEAMOS" = true ]; then
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml
+    else
+        # Standard Arch
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml
+    fi
 
 # --- 4. Apply Fixes (GLEW/SFML) ---
 echo "--- Applying Compatibility Fixes ---"
