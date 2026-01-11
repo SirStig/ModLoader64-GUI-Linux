@@ -106,6 +106,7 @@ elif command -v pacman >/dev/null; then
         # Standard Arch
         sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml
     fi
+fi
 
 # --- 4. Apply Fixes (GLEW/SFML) ---
 echo "--- Applying Compatibility Fixes ---"
