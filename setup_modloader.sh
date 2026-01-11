@@ -101,10 +101,10 @@ elif command -v pacman >/dev/null; then
     # -Sy fixes issues where local DB is out of sync causing 404s
     # --needed prevents reinstalling existing packages
     if [ "$IS_STEAMOS" = true ]; then
-        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxscrnsaver unzip
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxss unzip
     else
         # Standard Arch
-        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxscrnsaver unzip
+        sudo pacman -Sy --noconfirm --needed glew libappindicator-gtk3 speexdsp sfml sdl2_image libxss unzip
     fi
 fi
 
@@ -148,6 +148,30 @@ for lib in "${SFML_LIBS[@]}"; do
         echo "Fixed SFML: $lib"
     fi
 done
+
+# SDL2_Image (Fix for Steam Deck crash)
+# Ensure libSDL2_image-2.0.so.0 is available
+SDL2_IMG_TARGET="libSDL2_image-2.0.so.0"
+if ! ldconfig -p | grep -q "$SDL2_IMG_TARGET"; then
+    echo "Checking for SDL2_Image..."
+    FOUND_SDL=""
+    for search_path in /usr/lib64 /usr/lib/x86_64-linux-gnu /lib64 /usr/lib; do
+        if [ -d "$search_path" ]; then
+             FOUND=$(find "$search_path" -maxdepth 1 -name "libSDL2_image*.so*" 2>/dev/null | head -n 1)
+             if [ -n "$FOUND" ]; then
+                 FOUND_SDL="$FOUND"
+                 break
+             fi
+        fi
+    done
+    
+    if [ -n "$FOUND_SDL" ]; then
+        ln -sf "$FOUND_SDL" "./libs/$SDL2_IMG_TARGET"
+        echo "Fixed SDL2_Image: $FOUND_SDL linked to $SDL2_IMG_TARGET"
+    else
+        echo "WARNING: libSDL2_image not found! Game may crash."
+    fi
+fi
 
 # --- 5. Texture Pack Setup (Optional) ---
 echo ""
